@@ -14,7 +14,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -155,14 +156,15 @@ fun App() {
                     modifier = Modifier
                         .padding(top = 190.dp, start = 35.dp, end = 35.dp)
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CategoryChip(iconRes = Res.drawable.bot_meal, label = "Meal")
-                    CategoryChip(iconRes = Res.drawable.bot_dessert, label = "Dessert")
-                    CategoryChip(iconRes = Res.drawable.bot_vegan, label = "Vegan")
-                    CategoryChip(iconRes = Res.drawable.bot_drinks, label = "Drinks")
                     CategoryChip(iconRes = Res.drawable.bot_snacks, label = "Snacks")
+                    CategoryChip(iconRes = Res.drawable.bot_meal, label = "Meal")
+                    CategoryChip(iconRes = Res.drawable.bot_vegan, label = "Vegan")
+                    CategoryChip(iconRes = Res.drawable.bot_dessert, label = "Dessert")
+                    CategoryChip(iconRes = Res.drawable.bot_drinks, label = "Drinks")
+
                 }
 
                 // Best Seller header
@@ -174,7 +176,8 @@ fun App() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("Best Seller", color = ColorTextDark, fontSize = 20.sp, fontWeight = FontWeight.Medium)
-                    Text("View All", color = ColorOrange, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                    Text("View All", color = ColorOrange, fontSize = 12.sp, fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(end = 12.dp))
                 }
 
                 // Divider line
@@ -303,7 +306,7 @@ private fun CategoryChip(iconRes: DrawableResource, label: String) {
                 .height(62.dp),
             contentAlignment = Alignment.Center
         ) {
-            Image(painter = painterResource(iconRes), contentDescription = null, modifier = Modifier.size(24.dp))
+            Image(painter = painterResource(iconRes), contentDescription = null, modifier = Modifier.size(24.dp, 39.dp))
         }
         Spacer(Modifier.height(6.dp))
         Text(label, color = ColorTextDark, fontSize = 12.sp)
@@ -343,17 +346,17 @@ private fun SmallCard(imageRes: DrawableResource, price: String) {
 private fun PromoBanner(modifier: Modifier, rightImageRes: DrawableResource) {
     Box(
         modifier = modifier
-            .background(Color(0xFF391713))
+            .height(128.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White)
     ) {
         // Decorative swoosh background (approximation of Figma vector)
         Box(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .offset(y = 8.dp)
+                .offset(y = (-13).dp)
                 .fillMaxWidth()
-                .height(110.dp)
-                .clip(RoundedCornerShape(topStart = 90.dp, topEnd = 24.dp))
-                .background(ColorYellow2.copy(alpha = 0.35f))
+                .height(141.dp)
+                .background(ColorOrange)
         )
 
         // Right image
@@ -362,28 +365,43 @@ private fun PromoBanner(modifier: Modifier, rightImageRes: DrawableResource) {
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .align(Alignment.CenterEnd)
+                .offset(x = 153.dp)
                 .width(212.dp)
                 .height(141.dp)
         )
 
         // Accent circles per Figma (Ellipse 13 and 12)
-        Box(
+        Canvas(
             modifier = Modifier
                 .size(55.dp)
                 .align(Alignment.TopStart)
                 .offset(x = 106.dp, y = (-37).dp)
-                .clip(CircleShape)
-                .background(ColorYellow2.copy(alpha = 0.55f))
-        )
-        Box(
+        ) {
+            // 外圆半径
+            val radius = size.minDimension / 2
+            // 圆环宽度
+            val strokeWidth = 8.dp.toPx()
+            // 画圆环
+            drawCircle(
+                color = ColorBgYellow,
+                radius = radius - strokeWidth / 2, // 居中描边
+                style = Stroke(width = strokeWidth)
+            )
+        }
+        Canvas(
             modifier = Modifier
                 .size(46.dp)
                 .align(Alignment.TopStart)
                 .offset(x = (-14).dp, y = 105.dp)
-                .clip(CircleShape)
-                .background(ColorYellow2.copy(alpha = 0.55f))
-        )
+        ) {
+            val radius = size.minDimension / 2
+            val strokeWidth = 8.dp.toPx()
+            drawCircle(
+                color = ColorBgYellow,
+                radius = radius - strokeWidth / 2,
+                style = Stroke(width = strokeWidth)
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -430,8 +448,8 @@ private fun RecommendCard(imageRes: DrawableResource, rating: String, price: Str
             painter = painterResource(Res.drawable.heart_badge),
             contentDescription = null,
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .offset(x = (-17).dp, y = 10.dp)
+                .align(Alignment.TopCenter)
+                .offset(x = (-7).dp, y = 10.dp)
                 .size(14.dp)
         )
 
@@ -458,8 +476,8 @@ private fun RecommendCard(imageRes: DrawableResource, rating: String, price: Str
         // Price chip
         Box(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .offset(x = 13.dp, y = (-12).dp)
+                .align(Alignment.BottomEnd)
+                .offset(x = (-13).dp, y = (-12).dp)
                 .clip(RoundedCornerShape(topStart = 30.dp, bottomStart = 30.dp))
                 .background(ColorOrange)
                 .height(16.dp)
