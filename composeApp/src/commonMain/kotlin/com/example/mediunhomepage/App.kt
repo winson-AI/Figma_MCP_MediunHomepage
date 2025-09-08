@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -216,8 +217,8 @@ fun App() {
                 PromoBanner(
                     modifier = Modifier
                         .padding(top = 452.dp, start = 35.dp)
-                        .width(323.dp)
-                        .height(128.dp)
+                        .size(323.dp, 128.dp)
+                        .background(Color.White, RoundedCornerShape(20.dp))
                         .clip(RoundedCornerShape(20.dp)),
                     rightImageRes = Res.drawable.banner_pizza
                 )
@@ -344,16 +345,10 @@ private fun SmallCard(imageRes: DrawableResource, price: String) {
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun PromoBanner(modifier: Modifier, rightImageRes: DrawableResource) {
-    Box(
-        modifier = modifier
-            .height(128.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color.White)
-    ) {
+    Box(modifier = modifier) {
         // Decorative swoosh background (approximation of Figma vector)
         Box(
             modifier = Modifier
-                .offset(y = (-13).dp)
                 .fillMaxWidth()
                 .height(141.dp)
                 .background(ColorOrange)
